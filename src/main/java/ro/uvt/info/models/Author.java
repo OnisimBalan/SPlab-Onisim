@@ -1,9 +1,24 @@
 package ro.uvt.info.models;
 
-public class Author {
+import com.sun.jdi.PrimitiveValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.Getter;
 
+@Entity
+public class Author implements Visitee {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Getter
     private String name;
     private String surname;
+
+    public Author() {
+        name = "";
+        surname = "";
+    }
 
     public Author(String name) {
         this.name = name;
@@ -19,9 +34,8 @@ public class Author {
         this.surname = author.surname;
     }
 
-
-
-   public void print(){
-       System.out.println("Author: " + name);
-   }
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitAuthor(this);
+    }
 }

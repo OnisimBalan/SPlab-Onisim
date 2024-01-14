@@ -1,4 +1,4 @@
-package ro.uvt.info.models;
+package ro.uvt.info.services;
 
 public class AlignCenter implements AlignStrategy{
     @Override

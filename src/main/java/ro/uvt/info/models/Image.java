@@ -1,9 +1,18 @@
 package ro.uvt.info.models;
 
 
-public class Image extends Element {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.Getter;
+
+@Entity
+public class Image extends BaseElement implements Visitee {
+
+    @Getter
     private String imageName;
 
+    public Image() { imageName = ""; }
     public Image(String imageName) {
         this.imageName = imageName;
     }
@@ -11,27 +20,30 @@ public class Image extends Element {
         imageName = other.imageName;
     }
 
-    public void print(){
-        System.out.println("Image with name: " + imageName);
-    }
+
 
     @Override
-    public void add(Element e) {
+    public void add(BaseElement e) {
         throw new IllegalStateException("Cannot add an element");
     }
 
     @Override
-    public void remove(Element e) {
+    public void remove(BaseElement e) {
         throw new IllegalStateException("Cannot remove an element");
     }
 
     @Override
-    public Element get(int index) {
+    public BaseElement get(int index) {
         throw new IllegalStateException("Cannot get an element");
     }
 
     @Override
-    public Element clone() {
+    public BaseElement clone() {
         return new Image(this);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitImage(this);
     }
 }

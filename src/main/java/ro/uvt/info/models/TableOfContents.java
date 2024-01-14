@@ -1,21 +1,42 @@
 package ro.uvt.info.models;
 
-import java.util.ArrayList;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
+import lombok.Getter;
 
-public class TableOfContents extends Element {
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Entity
+public class TableOfContents extends BaseElement implements Visitee {
+
+    @Transient
+    private final List<String> entries;
+
     public TableOfContents(){
-        elementList = new ArrayList<>();
+        entries = new ArrayList<>();
     }
 
     public TableOfContents(TableOfContents other){
-        elementList = new ArrayList<>(other.elementList);
+        entries = new ArrayList<>(other.entries);
     }
 
     @Override
-    public void print(){}
+    public BaseElement clone() {
+        return new TableOfContents(this);
+    }
 
     @Override
-    public Element clone() {
-        return new TableOfContents(this);
+    public void accept(Visitor visitor) {
+        visitor.visitTableOfContents(this);
+    }
+
+
+    // add name if chapter/subchapter, adds null if paragraph, image, table
+    public void addEntry(String entry){
+        entries.add(entry);
     }
 }

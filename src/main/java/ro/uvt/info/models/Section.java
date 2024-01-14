@@ -1,33 +1,55 @@
 package ro.uvt.info.models;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-public class Section extends Element {
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Section extends BaseElement implements Visitee {
+
+    @OneToMany(targetEntity = BaseElement.class,cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    protected List<BaseElement> elementList= new ArrayList<>();
+
     protected String title;
 
+    public Section() {
+        title = "";
+    }
     public Section(String title) {
         this.title = title;
-        elementList = new ArrayList<>();
     }
-
     public Section(Section other){
         this.title = other.title;
         this.elementList = new ArrayList<>(other.elementList);
     }
 
     @Override
-    public void print() {
-        System.out.println(title);
-        for (Element element :
-                elementList) {
-            element.print();
-        }
+    public void add(BaseElement e) {
+        elementList.add(e);
     }
-
-
+    @Override
+    public void remove(BaseElement e) {
+        elementList.remove(e);
+    }
+    @Override
+    public BaseElement get(int index) {
+        return elementList.get(index);
+    }
 
     @Override
-    public Element clone() {
+    public BaseElement clone() {
         return new Section(this);
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitSection(this);
+    }
 }
+

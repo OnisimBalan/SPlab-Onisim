@@ -1,4 +1,4 @@
-package ro.uvt.info.models;
+package ro.uvt.info.designpatternslab2023;
 
 public interface Picture {
     public String getUrl();
